@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.XsksinfoMapper">
+    <resultMap type="Xsksinfo" id="queryMap">
+        <id property="id" column="id"/>
+        <result property="sid" column="sid"/>
+        <result property="ksid" column="ksid"/>
+
+        <result property="cdate" column="cdate"/>
+        <association property="userinfoVO" javaType="Userinfo">
+            <id property="id" column="id"/>
+            <result property="sno" column="sno"/>
+            <result property="upwd" column="upwd"/>
+            <result property="name" column="name"/>
+            <result property="sex" column="sex"/>
+            <result property="age" column="age"/>
+            <result property="tel" column="tel"/>
+
+        </association>
+        <association property="kcinfoVO" javaType="Kcinfo">
+            <id property="id" column="id"/>
+            <result property="name" column="kname"/>
+            <result property="tid" column="tid"/>
+
+        </association>
+
+    </resultMap>
+    <sql id="Where_Clause">
+        <where>
+            <if test="id!=null and id!=0">
+                and a.id= #{id}
+            </if>
+            <if test="sid!=null and sid!=0">
+                and a.sid= #{sid}
+            </if>
+            <if test="ksid!=null and ksid!=0">
+                and a.ksid= #{ksid}
+            </if>
+
+        </where>
+    </sql>
+    <select id="query" parameterType="java.util.Map" resultMap="queryMap">
+        select a.*,b.sno,b.upwd,b.name,b.sex,b.age,b.tel ,c.name kname,c.tid  from xsksinfo a left join
+        userinfo b on a.sid=b.id left join kcinfo c on a.ksid=c.id
+        <include refid="Where_Clause"/>
+        <if test="page">
+            limit #{offset} ,#{pageSize}
+        </if>
+    </select>
+    <select id="getCount" parameterType="java.util.Map" resultType="Int">
+        select count(*) nums from xsksinfo a left join userinfo b on a.sid=b.id left join kcinfo c on a.ksid=c.id
+        <include refid="Where_Clause"/>
+    </select>
+    <select id="queryXsksinfoById" parameterType="int" resultType="Xsksinfo">
+        select *
+        from xsksinfo
+        where id = ${value}
+    </select>
+    <insert id="insertXsksinfo" useGeneratedKeys="true" keyProperty="id" parameterType="Xsksinfo">
+        insert into xsksinfo
+            (sid, ksid,cdate)
+        values (#{sid}, #{ksid}, #{cdate} );
+    </insert>
+    <update id="updateXsksinfo" parameterType="Xsksinfo">
+        update xsksinfo
+        set sid=#{sid},
+            ksid=#{ksid},
+            cdate=#{cdate}
+        where id = #{id}
+    </update>
+    <delete id="deleteXsksinfo" parameterType="int">
+        delete
+        from xsksinfo
+        where id = ${value}
+    </delete>
+</mapper>
+ 

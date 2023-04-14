@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.KcinfoMapper">
+    <resultMap type="Kcinfo" id="queryMap">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="tid" column="tid"/>
+        <association property="userinfoVO" javaType="Userinfo">
+            <id property="id" column="id"/>
+            <result property="sno" column="sno"/>
+            <result property="upwd" column="upwd"/>
+            <result property="name" column="b_name"/>
+            <result property="sex" column="sex"/>
+            <result property="age" column="age"/>
+            <result property="tel" column="tel"/>
+            <result property="bid" column="bid"/>
+            <result property="utype" column="utype"/>
+        </association>
+    </resultMap>
+    <sql id="Where_Clause">
+        <where>
+            <if test="id!=null and id!=0">
+                and a.id= #{id}
+            </if>
+            <if test="name!=null and name!=''">
+                and a.name like '%${name}%'
+            </if>
+            <if test="tid!=null and tid!=0">
+                and a.tid= #{tid}
+            </if>
+            <if test="bid!=null and bid!=0">
+                and a.id in (select kcid from kcbjinfo where bjid = #{bid})
+            </if>
+        </where>
+    </sql>
+    <select id="query" parameterType="java.util.Map" resultMap="queryMap">
+        select a.*,b.sno,b.upwd,b.name b_name,b.sex,b.age,b.tel,b.bid,b.utype from kcinfo a left join userinfo b on
+        a.tid=b.id
+        <include refid="Where_Clause"/>
+        <if test="page">
+            limit #{offset} ,#{pageSize}
+        </if>
+    </select>
+    <select id="getCount" parameterType="java.util.Map" resultType="Int">
+        select count(*) nums from kcinfo a left join userinfo b on a.tid=b.id
+        <include refid="Where_Clause"/>
+    </select>
+    <select id="queryKcinfoById" parameterType="int" resultType="Kcinfo">
+        select *
+        from kcinfo
+        where id = ${value}
+    </select>
+    <insert id="insertKcinfo" useGeneratedKeys="true" keyProperty="id" parameterType="Kcinfo">
+        insert into kcinfo
+            (name, tid)
+        values (#{name}, #{tid});
+    </insert>
+    <update id="updateKcinfo" parameterType="Kcinfo">
+        update kcinfo
+        set name=#{name},
+            tid=#{tid}
+        where id = #{id}
+    </update>
+    <delete id="deleteKcinfo" parameterType="int">
+        delete
+        from kcinfo
+        where id = ${value}
+    </delete>
+</mapper>
+ 

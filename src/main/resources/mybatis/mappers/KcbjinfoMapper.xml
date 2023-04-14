@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.KcbjinfoMapper">
+    <resultMap type="Kcbjinfo" id="queryMap">
+        <id property="id" column="id"/>
+        <result property="kcid" column="kcid"/>
+        <result property="bjid" column="bjid"/>
+        <association property="kcinfoVO" javaType="Kcinfo">
+            <id property="id" column="id"/>
+            <result property="name" column="name"/>
+            <result property="tid" column="tid"/>
+        </association>
+        <association property="bjinfoVO" javaType="Bjinfo">
+            <id property="id" column="id"/>
+            <result property="name" column="name1"/>
+        </association>
+    </resultMap>
+    <sql id="Where_Clause">
+        <where>
+            <if test="id!=null and id!=0">
+                and a.id= #{id}
+            </if>
+            <if test="kcid!=null and kcid!=0">
+                and a.kcid= #{kcid}
+            </if>
+            <if test="bjid!=null and bjid!=0">
+                and a.bjid= #{bjid}
+            </if>
+        </where>
+    </sql>
+    <select id="query" parameterType="java.util.Map" resultMap="queryMap">
+        select a.*,b.name,b.tid,c.name name1 from kcbjinfo a left join kcinfo b on a.kcid=b.id left join bjinfo c on
+        a.bjid=c.id
+        <include refid="Where_Clause"/>
+        <if test="page">
+            limit #{offset} ,#{pageSize}
+        </if>
+    </select>
+    <select id="getCount" parameterType="java.util.Map" resultType="Int">
+        select count(*) nums from kcbjinfo a left join kcinfo b on a.kcid=b.id left join bjinfo c on a.bjid=c.id
+        <include refid="Where_Clause"/>
+    </select>
+    <select id="queryKcbjinfoById" parameterType="int" resultType="Kcbjinfo">
+        select *
+        from kcbjinfo
+        where id = ${value}
+    </select>
+    <insert id="insertKcbjinfo" useGeneratedKeys="true" keyProperty="id" parameterType="Kcbjinfo">
+        insert into kcbjinfo
+            (kcid, bjid)
+        values (#{kcid}, #{bjid});
+    </insert>
+    <update id="updateKcbjinfo" parameterType="Kcbjinfo">
+        update kcbjinfo
+        set kcid=#{kcid},
+            bjid=#{bjid}
+        where id = #{id}
+    </update>
+    <delete id="deleteKcbjinfo" parameterType="int">
+        delete
+        from kcbjinfo
+        where id = ${value}
+    </delete>
+</mapper>
+ 

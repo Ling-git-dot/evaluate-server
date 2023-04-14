@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.TimuMapper">
+    <resultMap type="Timu" id="queryMap">
+        <id property="id" column="id"/>
+        <result property="ctype" column="ctype"/>
+        <result property="title" column="title"/>
+        <result property="xxa" column="xxa"/>
+        <result property="xxb" column="xxb"/>
+        <result property="xxc" column="xxc"/>
+        <result property="xxd" column="xxd"/>
+        <result property="dtid" column="dtid"/>
+
+    </resultMap>
+    <sql id="Where_Clause">
+        <where>
+            <if test="id!=null and id!=0">
+                and a.id= #{id}
+            </if>
+            <if test="ctype!=null and ctype!=0">
+                and a.ctype= #{ctype}
+            </if>
+
+        </where>
+    </sql>
+    <select id="query" parameterType="java.util.Map" resultMap="queryMap">
+        select a.*  from timu a
+        <include refid="Where_Clause"/>
+        <if test="page">
+            limit #{offset} ,#{pageSize}
+        </if>
+    </select>
+    <select id="getCount" parameterType="java.util.Map" resultType="Int">
+        select count(*) nums from timu a
+        <include refid="Where_Clause"/>
+    </select>
+    <select id="queryTimuById" parameterType="int" resultType="Timu">
+        select *
+        from timu
+        where id = ${value}
+    </select>
+    <insert id="insertTimu" useGeneratedKeys="true" keyProperty="id" parameterType="Timu">
+        insert into timu
+            (ctype, title, xxa, xxb, xxc, xxd , dtid )
+        values (#{ctype}, #{title}, #{xxa}, #{xxb}, #{xxc}, #{xxd} , 0 );
+    </insert>
+    <update id="updateTimu" parameterType="Timu">
+        update timu
+        set ctype=#{ctype},
+            title=#{title},
+            xxa=#{xxa},
+            xxb=#{xxb},
+            xxc=#{xxc},
+            xxd=#{xxd},
+            dtid=#{dtid}
+        where id = #{id}
+    </update>
+    <delete id="deleteTimu" parameterType="int">
+        delete
+        from timu
+        where id = ${value}
+    </delete>
+</mapper>
+ 

@@ -1,0 +1,24 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /evaluate
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/jspjxt
+    username: root
+    password: 151654
+  servlet:
+    multipart:
+      enabled: true
+file:
+  server:
+    dir: D:\uploadFile\
+    path: /
+mybatis:
+  mapper-locations: classpath:/mybatis/mappers/*.xml
+  type-aliases-package: com.model
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+

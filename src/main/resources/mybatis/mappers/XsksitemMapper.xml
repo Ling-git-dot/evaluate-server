@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.XsksitemMapper">
+    <resultMap type="Xsksitem" id="queryMap">
+        <id property="id" column="id"/>
+        <result property="xsksid" column="xsksid"/>
+        <result property="tmid" column="tmid"/>
+        <result property="da" column="da"/>
+
+        <association property="xsksinfoVO" javaType="Xsksinfo">
+            <id property="id" column="id"/>
+            <result property="sid" column="sid"/>
+            <result property="ksid" column="ksid"/>
+
+        </association>
+        <association property="timuVO" javaType="Timu">
+            <id property="id" column="id"/>
+            <result property="ctype" column="ctype"/>
+            <result property="title" column="title"/>
+            <result property="xxa" column="xxa"/>
+            <result property="xxb" column="xxb"/>
+            <result property="xxc" column="xxc"/>
+            <result property="xxd" column="xxd"/>
+            <result property="dtid" column="dtid"/>
+        </association>
+    </resultMap>
+    <sql id="Where_Clause">
+        <where>
+            <if test="id!=null and id!=0">
+                and a.id= #{id}
+            </if>
+            <if test="xsksid!=null and xsksid!=0">
+                and a.xsksid= #{xsksid}
+            </if>
+            <if test="tmid!=null and tmid!=0">
+                and a.tmid= #{tmid}
+            </if>
+            <if test="ctype!=null and ctype!=0">
+                and c.ctype= #{ctype}
+            </if>
+
+            <if test="da!=null and da!=''">
+                and a.da= #{da}
+            </if>
+
+            <if test="ksid!=null and ksid!=0">
+                and b.ksid= #{ksid}
+            </if>
+
+        </where>
+    </sql>
+    <select id="query" parameterType="java.util.Map" resultMap="queryMap">
+        select a.*,b.sid,b.ksid,c.ctype,c.title,c.xxa,c.xxb,c.xxc,c.xxd ,c.dtid
+        c_fs from xsksitem a left join xsksinfo b on a.xsksid=b.id left join timu c on a.tmid=c.id
+        <include refid="Where_Clause"/>
+        <if test="page">
+            limit #{offset} ,#{pageSize}
+        </if>
+    </select>
+    <select id="getCount" parameterType="java.util.Map" resultType="Int">
+        select count(*) nums from xsksitem a left join xsksinfo b on a.xsksid=b.id left join timu c on a.tmid=c.id
+        <include refid="Where_Clause"/>
+    </select>
+    <select id="queryXsksitemById" parameterType="int" resultType="Xsksitem">
+        select *
+        from xsksitem
+        where id = ${value}
+    </select>
+    <insert id="insertXsksitem" useGeneratedKeys="true" keyProperty="id" parameterType="Xsksitem">
+        insert into xsksitem
+            (xsksid, tmid, da)
+        values (#{xsksid}, #{tmid}, #{da});
+    </insert>
+    <update id="updateXsksitem" parameterType="Xsksitem">
+        update xsksitem
+        set xsksid=#{xsksid},
+            tmid=#{tmid},
+            da=#{da}
+        where id = #{id}
+    </update>
+    <delete id="deleteXsksitem" parameterType="int">
+        delete
+        from xsksitem
+        where id = ${value}
+    </delete>
+</mapper>
+ 

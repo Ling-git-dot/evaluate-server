@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="yqfksbxt-server" />
+        <module name="xyjkglxt-server" />
+        <module name="xscjglwz-server" />
+        <module name="bzxzf-server" />
+        <module name="evaluate-server" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="bzxzf-server" target="1.8" />
+      <module name="evaluate-server" target="1.8" />
+      <module name="xscjglwz-server" target="1.8" />
+      <module name="xyjkglxt-server" target="1.8" />
+      <module name="yqfksbxt-server" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="bzxzf-server" options="-parameters" />
+      <module name="evaluate-server" options="-parameters" />
+      <module name="xscjglwz-server" options="-parameters" />
+      <module name="xyjkglxt-server" options="-parameters" />
+      <module name="yqfksbxt-server" options="-parameters" />
+    </option>
+  </component>
+</project>

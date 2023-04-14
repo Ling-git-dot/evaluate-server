@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mapper.BminfoMapper">
+    <sql id="Where_Clause">
+        <where>
+            <if test="id!=null and id!=0">
+                and id= #{id}
+            </if>
+            <if test="name!=null and name!=''">
+                and name like '%${name}%'
+            </if>
+        </where>
+    </sql>
+    <select id="query" parameterType="java.util.Map" resultType="Bminfo">
+        select * from bminfo
+        <include refid="Where_Clause"/>
+        <if test="page">
+            limit #{offset} ,#{pageSize}
+        </if>
+    </select>
+    <select id="getCount" parameterType="java.util.Map" resultType="Int">
+        select count(0) from bminfo
+        <include refid="Where_Clause"/>
+    </select>
+    <select id="queryBminfoById" parameterType="int" resultType="Bminfo">
+        select *
+        from bminfo
+        where id = ${value}
+    </select>
+    <insert id="insertBminfo" useGeneratedKeys="true" keyProperty="id" parameterType="Bminfo">
+        insert into bminfo
+            (name)
+        values (#{name});
+    </insert>
+    <update id="updateBminfo" parameterType="Bminfo">
+        update bminfo
+        set name=#{name}
+        where id = #{id}
+    </update>
+    <delete id="deleteBminfo" parameterType="int">
+        delete
+        from bminfo
+        where id = ${value}
+    </delete>
+</mapper>
+ 
